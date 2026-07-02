@@ -20,7 +20,10 @@ git config core.hooksPath scripts/hooks
 
 ## 项目性质
 
-这是 **OpenCode skills 分发仓库**，不是传统代码项目。核心资产是 `SKILL.md` 及配套参考文档，通过 GitHub 仓库分发，skills.sh 自动索引。
+这是 **OpenCode skills 分发仓库 + MCP 服务 monorepo**，不是传统代码项目。核心资产有两类：
+
+- **Skills**：`packages/` 下，`SKILL.md` 及配套参考文档，通过 GitHub 仓库分发，skills.sh 自动索引
+- **MCP 服务**：`mcp/` 下，可执行的 MCP server 实现，**每个子目录独立自治**（自带 `pyproject.toml` / `.venv` / `uv.lock`，不设根 workspace，避免 `uv sync` 误装所有 MCP 依赖）
 
 ## 关键约束
 
@@ -29,6 +32,7 @@ git config core.hooksPath scripts/hooks
 - **不能包含 `/`**，这是最常见的错误来源
 - OpenCode 只识别 5 个 frontmatter 字段：`name`、`description`、`license`、`compatibility`、`metadata`
 - 其他字段（如 `triggers`）会被静默忽略，不要添加
+- **MCP 子目录必须保留各自 `pyproject.toml`（Python）或 `package.json`（Node）**，独立 `uv sync` / `npm install`，不设根 workspace
 
 ## 目录边界
 

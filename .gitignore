@@ -1,2 +1,10 @@
 node_modules/
 .changeset/
+
+# Python (uv workspace)
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.uv-cache/
+.ruff_cache/

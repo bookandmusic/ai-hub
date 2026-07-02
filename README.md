@@ -1,18 +1,26 @@
 # ai-hub
 
-Agent skills 与 MCP 资源集合，基于 GitHub 仓库分发。所有 skill 内容 agent 无关，支持 OpenCode / Claude Code / Codex / Cursor 等所有兼容 SKILL.md 标准的工具，通过 skills.sh 索引、`npx skills` 安装。
+Agent skills 与 MCP 服务集合，基于 GitHub 仓库分发。所有 skill 内容 agent 无关，支持 OpenCode / Claude Code / Codex / Cursor 等所有兼容 SKILL.md 标准的工具，通过 skills.sh 索引、`npx skills` 安装。MCP 服务按子目录独立自治，通过 `uvx` / `npx` 在线执行。
 
-## 包含的 Skills
+## Skills
 
-| 包名 | 描述 | 兼容性 |
-|---|---|---|
-| `git-commit` | Git 提交规范：约定式提交、提交拆分、安全规则 | 全部 agent |
-| `prompt-gen` | 图像提示词生成器：6 种模式，模板/风格/评估体系完备 | 需 subagent + 多模态 |
-| `game` | Web 游戏开发工作流：规划、实现、审查、测试 | 全部 agent |
+Markdown 资产，通过 skills CLI 安装到 agent 目录，agent 自动识别 `SKILL.md` 按触发词加载。
 
-> MCP 资源后续整理加入。
+| 包名 | 描述 | 兼容性 | 详情 |
+|---|---|---|---|
+| `git-commit` | Git 提交规范：约定式提交、提交拆分、安全规则 | 全部 agent | [→](packages/git-commit/README.md) |
+| `prompt-gen` | 图像提示词生成器：6 种模式，模板/风格/评估体系完备 | 需 subagent + 多模态 | [→](packages/prompt-gen/README.md) |
+| `game` | Web 游戏开发工作流：规划、实现、审查、测试 | 全部 agent | [→](packages/game/README.md) |
 
-## 安装使用
+## MCP
+
+可执行 MCP 服务，子目录独立工具链，各自 venv + lock，互不共享依赖（MCP 是独立服务，按需安装，不强制跨包统一）。
+
+| MCP | 语言 | 说明 | 详情 |
+|---|---|---|---|
+| `openai-image-mcp` | Python | 多后端图像生成（Sensenova、ModelScope）暴露为独立 MCP 工具 | [→](mcp/openai-image-mcp/README.md) |
+
+## 安装 Skills
 
 ```bash
 # 安装单个 skill（默认项目级，装到当前项目的 agent skills 目录）
@@ -38,7 +46,18 @@ npx skills add https://github.com/bookandmusic/ai-hub --skill game
 npx skills add ./ --skill game          # 本地开发
 ```
 
-## 安装位置
+## 使用 MCP
+
+无需克隆仓库，`uvx` 从 GitHub 拉取执行（`#subdirectory=` 指向 monorepo 子目录，自动建临时 venv、装依赖、执行 entry script，不落盘）：
+
+```bash
+uvx --from "git+https://github.com/bookandmusic/ai-hub#subdirectory=mcp/openai-image-mcp" \
+    openai-image-mcp
+```
+
+或配置到 agent 的 MCP 客户端（opencode `opencode.json` / Claude Code `~/.claude/settings.json`）自动拉起，完整配置示例与各 MCP 参数详见对应 [MCP README](#mcp)。
+
+## 安装位置（Skills）
 
 `npx skills` 按目标 agent 安装到对应目录，各 agent 自动发现这些路径下的 `SKILL.md`：
 
@@ -49,25 +68,19 @@ npx skills add ./ --skill game          # 本地开发
 
 > OpenCode 还会额外搜索 `.opencode/skills/`，与上表路径均可被发现。
 
-## 本地开发
-
-```bash
-pnpm install
-git config core.hooksPath scripts/hooks   # 启用 pre-commit 校验（克隆后执行一次）
-```
-
-启用后每次 `git commit` 前自动校验 SKILL.md frontmatter（name 正则 / description 必填 / `---` 闭合），失败则提交被拒绝。
-
 ## 目录结构
 
 ```
-packages/
-├── git-commit/       # Git 提交规范
-├── prompt-gen/       # 图像提示词生成器
-└── game/             # Web 游戏开发工作流
+packages/             # Skills（Markdown 资产，skills CLI 分发）
+├── git-commit/
+├── prompt-gen/
+└── game/
+mcp/                  # MCP 服务（可执行，子目录独立工具链，各自 venv + lock）
+└── openai-image-mcp/ # Python（pyproject.toml + .venv + uv.lock 自治）
+pnpm-workspace.yaml   # pnpm workspace 根（仅 packages/*，不扫 mcp/）
 ```
 
-每个 skill 是独立目录，包含 `SKILL.md` + 可选子目录（`references/`、`templates/`、`checklists/` 等）。skills CLI 通过递归发现自动识别 `packages/` 下的 skill（已实测验证）。
+每个 skill 子目录含 `SKILL.md` + 可选 `references/`、`templates/`、`checklists/`。skills CLI 通过递归发现自动识别 `packages/` 下的 skill。每个 MCP 子目录是完全独立的 Python 包，自带 `pyproject.toml`、`.venv/`、`uv.lock`，互不共享依赖；不设根 `pyproject.toml`，避免 `uv sync` 误装所有 MCP 依赖。未来如新增 Node 实现的 MCP，按子目录独立工具链组织（`package.json` + `bin`，启动用 `npx`）。
 
 ## 许可证
 
