@@ -1,0 +1,12 @@
+{
+  "name": "@bookandmusic/prompt-gen",
+  "version": "0.1.0",
+  "description": "图像提示词生成器 skill：6种模式（人物/风景/物体/概念/信息图/风格模仿）",
+  "type": "module",
+  "files": ["SKILL.md", "docs", "references"],
+  "scripts": {
+    "build": "echo 'no build needed'"
+  },
+  "keywords": ["opencode", "claude-code", "codex", "cursor", "skill", "prompt", "image-generation"],
+  "license": "MIT"
+}

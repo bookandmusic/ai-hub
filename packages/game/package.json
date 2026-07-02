@@ -1,0 +1,12 @@
+{
+  "name": "@bookandmusic/game",
+  "version": "0.1.0",
+  "description": "Web 游戏开发工作流 skill：覆盖规划、实现、审查、测试全流程",
+  "type": "module",
+  "files": ["SKILL.md", "templates", "checklists", "references", "docs"],
+  "scripts": {
+    "build": "echo 'no build needed'"
+  },
+  "keywords": ["opencode", "claude-code", "codex", "cursor", "skill", "game", "web-game", "canvas"],
+  "license": "MIT"
+}

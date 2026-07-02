@@ -1,0 +1,11 @@
+{
+  "name": "ai-tools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OpenCode skills & MCP tools monorepo",
+  "scripts": {
+    "validate": "bash scripts/validate-skills.sh"
+  },
+  "keywords": ["opencode", "skills"],
+  "license": "MIT"
+}

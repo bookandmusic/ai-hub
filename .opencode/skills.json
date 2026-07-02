@@ -1,0 +1,16 @@
+{
+  "skills": [
+    {
+      "name": "git-commit",
+      "path": "./packages/git-commit"
+    },
+    {
+      "name": "prompt-gen",
+      "path": "./packages/prompt-gen"
+    },
+    {
+      "name": "game",
+      "path": "./packages/game"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@bookandmusic/git-commit",
+  "version": "0.1.0",
+  "description": "Git 提交规范 skill：约定式提交、提交拆分、安全规则",
+  "type": "module",
+  "files": ["SKILL.md"],
+  "scripts": {
+    "build": "echo 'no build needed'"
+  },
+  "keywords": ["opencode", "claude-code", "codex", "cursor", "skill", "git", "commit"],
+  "license": "MIT"
+}

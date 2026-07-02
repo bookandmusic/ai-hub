@@ -1,0 +1,15 @@
+#!/bin/bash
+# pre-commit hook: 提交前校验 SKILL.md，失败则禁止提交。
+# 仓库内可移植版本：随 scripts/hooks/ 提交，需执行
+#   git config core.hooksPath scripts/hooks
+# 启用（见 AGENTS.md / README.md）。
+
+# 锚定仓库根目录，避免 CWD 不一致导致找不到脚本
+ROOT="$(git rev-parse --show-toplevel)"
+
+if ! bash "$ROOT/scripts/validate-skills.sh"; then
+  echo ""
+  echo "❌ Commit rejected: SKILL.md validation failed"
+  echo "   Fix the errors above, or run 'bash scripts/validate-skills.sh' to check locally"
+  exit 1
+fi
